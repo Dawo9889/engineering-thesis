@@ -1,0 +1,65 @@
+# Wyłączamy zależności, bo korzystamy z zewnętrznego Postgresa
+postgresqlDependencyEnabled: false
+mariadbDependencyEnabled: false
+redisDependencyEnabled: true
+
+# Redis zostawiamy włączone (wymagane przez Passbolt)
+redis:
+  auth:
+    enabled: true
+    password: "redis-passbolt-password"
+  sentinel:
+    enabled: true
+
+# Konfiguracja Passbolt
+app:
+  image:
+    repository: passbolt/passbolt
+    tag: 5.6.0-1-ce
+    pullPolicy: IfNotPresent
+  database:
+    kind: postgresql # bo łączymy z zewnętrznym Postgresa
+
+# Environment variables
+passboltEnv:
+  plain:
+    APP_FULL_BASE_URL: http://localhost:8080  # dla port-forward
+    PASSBOLT_SSL_FORCE: false                  # HTTP na start
+    CACHE_CAKE_DEFAULT_SERVER: 127.0.0.1
+    PASSBOLT_REGISTRATION_PUBLIC: true
+    DEBUG: true
+    PASSBOLT_KEY_EMAIL: passbolt@yourdomain.com
+    EMAIL_DEFAULT_FROM: no-reply@passbolt.local
+    EMAIL_DEFAULT_FROM_NAME: Passbolt
+    EMAIL_TRANSPORT_DEFAULT_HOST: 127.0.0.1
+    EMAIL_TRANSPORT_DEFAULT_PORT: 587
+    EMAIL_TRANSPORT_DEFAULT_TLS: false
+    DATASOURCES_DEFAULT_HOST: postgres-cluster-rw.db.svc.cluster.local
+    DATASOURCES_DEFAULT_PORT: "5432"
+  secret:
+    DATASOURCES_DEFAULT_DATABASE: passbolt
+    DATASOURCES_DEFAULT_USERNAME: passbolt
+    DATASOURCES_DEFAULT_PASSWORD: zaq12wsx
+    CACHE_CAKE_DEFAULT_PASSWORD: redis-passbolt-password
+
+# Service ustawiamy na ClusterIP i dodajemy port HTTP
+service:
+  type: ClusterIP
+  ports:
+    http:
+      port: 80
+      targetPort: 80
+      name: http
+    https:
+      port: 443
+      targetPort: 443
+      name: https
+
+# Ingress wyłączamy
+ingress:
+  enabled: false
+
+# Repliki i skalowanie
+replicaCount: 1
+autoscaling:
+  enabled: false
