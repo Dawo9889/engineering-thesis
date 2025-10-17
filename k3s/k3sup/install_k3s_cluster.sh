@@ -85,13 +85,22 @@ kubectl wait --namespace ingress-nginx \
 echo -e "${GREEN} K3s + MetalLB + NGINX Ingress installation complete!${NC}"
 echo -e "Check LoadBalancer IP with: kubectl get svc -n ingress-nginx"
 
-echo "Installing cert manager"
+echo "Installing cert-manager"
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.19.1/cert-manager.yaml
 
-echo -e "${GREEN}⏳ Waiting for Cert Manger controller to be ready...${NC}"
+echo -e "${GREEN}⏳ Waiting for cert-manager deployments to be ready...${NC}"
+# Wait for cert-manager core components: controller, cainjector and webhook
 kubectl wait --namespace cert-manager \
   --for=condition=available deployment/cert-manager --timeout=180s
+kubectl wait --namespace cert-manager \
+  --for=condition=available deployment/cert-manager-cainjector --timeout=180s
+kubectl wait --namespace cert-manager \
+  --for=condition=available deployment/cert-manager-webhook --timeout=180s
 
-echo "Add cluster Issuer"
+echo "Applying ClusterIssuer"
 kubectl apply -f ../clusterIssuer.yaml
+
+
+echo -e "${GREEN}⏳ Installing CloudNativePG (operator)...${NC}"
+kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.17/releases/cnpg-1.17.5.yaml
 
