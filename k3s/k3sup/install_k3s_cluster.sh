@@ -89,3 +89,6 @@ kubectl wait --namespace ingress-nginx \
 
 echo -e "${GREEN} K3s + MetalLB + NGINX Ingress installation complete!${NC}"
 echo -e "Check LoadBalancer IP with: kubectl get svc -n ingress-nginx"
+
+echo "Applying test deployment manifest"
+kubectl apply -f "../test-ingress-deployment.yaml"
