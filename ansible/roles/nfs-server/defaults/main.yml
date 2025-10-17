@@ -1,0 +1,7 @@
+---
+# Default export path and options
+nfs_export_path: /srv/nfs/k8s
+nfs_export_options: rw,sync,no_subtree_check,no_root_squash
+# Networks allowed to mount (comma separated or list)
+nfs_allowed_networks:
+  - 192.168.0.0/24

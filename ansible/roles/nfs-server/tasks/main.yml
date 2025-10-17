@@ -1,0 +1,51 @@
+---
+- name: Install NFS packages (Debian)
+  apt:
+    name: nfs-kernel-server
+    state: present
+    update_cache: yes
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Install NFS packages (RedHat)
+  yum:
+    name: nfs-utils
+    state: present
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Ensure export directory exists
+  file:
+    path: "{{ nfs_export_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Build exports lines
+  set_fact:
+    _nfs_exports: |-
+      {% for net in nfs_allowed_networks %}
+      {{ nfs_export_path }} {{ net }}({{ nfs_export_options }})
+      {% endfor %}
+
+- name: Template /etc/exports
+  copy:
+    dest: /etc/exports
+    content: "{{ _nfs_exports | trim }}\n"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload export table
+
+- name: Ensure NFS service is enabled and started (Debian)
+  service:
+    name: nfs-kernel-server
+    state: started
+    enabled: yes
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Ensure NFS service is enabled and started (RedHat)
+  service:
+    name: nfs-server
+    state: started
+    enabled: yes
+  when: ansible_facts['os_family'] == 'RedHat'

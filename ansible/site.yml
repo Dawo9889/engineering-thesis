@@ -8,3 +8,9 @@
   roles:
     - haproxy
     - keepalived
+
+- name: Configure NFS servers
+  hosts: nfs
+  gather_facts: true
+  roles:
+    - nfs-server
