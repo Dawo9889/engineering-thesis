@@ -23,7 +23,8 @@ $K3SUP install \
   --ssh-key "$SSH_KEY" \
   --merge \
   --context "$CONTEXT_NAME" \
-  --local-path "$KUBECONFIG_PATH"
+  --local-path "$KUBECONFIG_PATH" \
+  --k3s-extra-args '--disable traefik'
 
 echo -e "${GREEN}🔗 Joining worker node ${WORKER_IP}...${NC}"
 $K3SUP join \
@@ -37,7 +38,7 @@ kubectl config use-context "$CONTEXT_NAME"
 
 # === Install MetalLB ===
 echo -e "${GREEN}⚙️  Installing MetalLB...${NC}"
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.9/config/manifests/metallb-native.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.15.2/config/manifests/metallb-native.yaml
 
 # Wait until MetalLB components are ready
 echo -e "${GREEN}⏳ Waiting for MetalLB controller and speaker to be ready...${NC}"
@@ -67,12 +68,6 @@ EOF
 # === Install NGINX Ingress Controller ===
 echo -e "${GREEN}🌐 Installing NGINX Ingress Controller...${NC}"
 
-# Ensure Helm is installed
-if ! command -v helm &>/dev/null; then
-  echo "Helm not found. Installing Helm..."
-  curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-fi
-
 # Add NGINX repo and install
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
@@ -90,5 +85,13 @@ kubectl wait --namespace ingress-nginx \
 echo -e "${GREEN} K3s + MetalLB + NGINX Ingress installation complete!${NC}"
 echo -e "Check LoadBalancer IP with: kubectl get svc -n ingress-nginx"
 
-echo "Applying test deployment manifest"
-kubectl apply -f "../test-ingress-deployment.yaml"
+echo "Installing cert manager"
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.19.1/cert-manager.yaml
+
+echo -e "${GREEN}⏳ Waiting for Cert Manger controller to be ready...${NC}"
+kubectl wait --namespace cert-manager \
+  --for=condition=available deployment/cert-manager --timeout=180s
+
+echo "Add cluster Issuer"
+kubectl apply -f ../clusterIssuer.yaml
+

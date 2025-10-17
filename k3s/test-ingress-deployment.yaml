@@ -40,6 +40,23 @@ spec:
   type: ClusterIP
 
 ---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-k3s-dawo9889-homelab-ovh
+  namespace: test-ingress
+spec:
+  secretName: wildcard-k3s-dawo9889-homelab-ovh-tls
+  issuerRef:
+    name: letsencrypt-cloudflare
+    kind: ClusterIssuer
+  dnsNames:
+    - "*.k3s.dawo9889-homelab.ovh"
+    - "k3s.dawo9889-homelab.ovh"
+
+---
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -47,10 +64,16 @@ metadata:
   namespace: test-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: "nginx"
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - hello.k3s.dawo9889-homelab.ovh
+    # Use the wildcard certificate secret produced above
+    secretName: wildcard-k3s-dawo9889-homelab-ovh-tls
   rules:
-  - host: hello.local
+  - host: hello.k3s.dawo9889-homelab.ovh
     http:
       paths:
       - path: /
