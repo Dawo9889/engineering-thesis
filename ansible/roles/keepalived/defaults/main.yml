@@ -1,0 +1,6 @@
+---
+# Reasonable defaults; may override in group_vars/ or inventory
+keepalived_interface: eth0
+virtual_router_id: 51
+virtual_ip: 192.168.0.10
+keepalived_auth_pass: ChangeThisPass

@@ -1,0 +1,38 @@
+global
+  log /dev/log local0
+  log /dev/log local1 notice
+  maxconn 4096
+  daemon
+
+defaults
+  log     global
+  mode    tcp
+  option  dontlognull
+  option  redispatch
+  retries 3
+  timeout connect 5s
+  timeout client  50s
+  timeout server  50s
+
+frontend k8s_api
+  bind *:{{ haproxy_listen_port }}
+  mode tcp
+  default_backend k8s_api_backend
+
+backend k8s_api_backend
+  mode tcp
+  balance roundrobin
+  option tcp-check
+{% for endpoint in masters_api_servers %}
+  server master{{ loop.index }} {{ endpoint }} check fall 3 rise 2
+{% endfor %}
+
+{% if haproxy_stats_enabled | default(false) %}
+listen stats
+  bind *:{{ haproxy_stats_port }}
+  mode http
+  stats enable
+  stats uri /
+  stats refresh 5s
+  stats auth {{ haproxy_stats_user }}:{{ haproxy_stats_pass }}
+{% endif %}

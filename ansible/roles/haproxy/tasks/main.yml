@@ -1,0 +1,26 @@
+---
+- name: Install HAProxy
+  package:
+    name: haproxy
+    state: present
+
+- name: Create HAProxy configuration directory (idempotent)
+  file:
+    path: /etc/haproxy
+    state: directory
+    mode: '0755'
+
+- name: Deploy haproxy.cfg
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart haproxy
+
+- name: Ensure HAProxy enabled and started
+  service:
+    name: haproxy
+    state: started
+    enabled: true

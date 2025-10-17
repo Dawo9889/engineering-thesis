@@ -1,0 +1,10 @@
+---
+- name: Configure HA load balancers
+  hosts: lb
+  gather_facts: true
+  vars:
+    # Override interface if not eth0
+    keepalived_interface: "{{ hostvars[inventory_hostname].keepalived_interface | default('eth0') }}"
+  roles:
+    - haproxy
+    - keepalived
