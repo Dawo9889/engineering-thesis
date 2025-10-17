@@ -23,8 +23,8 @@ app:
 # Environment variables
 passboltEnv:
   plain:
-    APP_FULL_BASE_URL: http://localhost:8080  # dla port-forward
-    PASSBOLT_SSL_FORCE: false                  # HTTP na start
+    APP_FULL_BASE_URL: https://passbolt.k3s.dawo9889-homelab.ovh
+    PASSBOLT_SSL_FORCE: true
     CACHE_CAKE_DEFAULT_SERVER: 127.0.0.1
     PASSBOLT_REGISTRATION_PUBLIC: true
     DEBUG: true
@@ -37,7 +37,7 @@ passboltEnv:
     DATASOURCES_DEFAULT_HOST: postgres-cluster-rw.db.svc.cluster.local
     DATASOURCES_DEFAULT_PORT: "5432"
   secret:
-    DATASOURCES_DEFAULT_DATABASE: passbolt
+    DATASOURCES_DEFAULT_DATABASE: passbolt-db
     DATASOURCES_DEFAULT_USERNAME: passbolt
     DATASOURCES_DEFAULT_PASSWORD: zaq12wsx
     CACHE_CAKE_DEFAULT_PASSWORD: redis-passbolt-password
@@ -55,9 +55,25 @@ service:
       targetPort: 443
       name: https
 
-# Ingress wyłączamy
 ingress:
-  enabled: false
+  enabled: true
+  annotations:
+    "kubernetes.io/ingress.class": "nginx"
+    "cert-manager.io/cluster-issuer": "letsencrypt-cloudflare"
+    "nginx.ingress.kubernetes.io/ssl-redirect": "true"
+    "nginx.ingress.kubernetes.io/force-ssl-redirect": "true"
+    "nginx.ingress.kubernetes.io/backend-protocol": "HTTP"
+  hosts:
+    - host: "passbolt.k3s.dawo9889-homelab.ovh"
+      paths:
+        - path: "/"
+          port: http
+          pathType: "ImplementationSpecific"
+  tls:
+    - autogenerate: false
+      existingSecret: "passbolt-tls"
+      hosts:
+        - "passbolt.k3s.dawo9889-homelab.ovh"
 
 # Repliki i skalowanie
 replicaCount: 1
