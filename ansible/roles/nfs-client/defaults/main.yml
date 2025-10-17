@@ -1,0 +1,3 @@
+---
+# defaults for nfs_client role
+rpcbind_service_name: rpcbind

@@ -98,9 +98,19 @@ kubectl wait --namespace cert-manager \
   --for=condition=available deployment/cert-manager-webhook --timeout=180s
 
 echo "Applying ClusterIssuer"
-kubectl apply -f ../clusterIssuer.yaml
+kubectl apply -f ../test-nginx/clusterIssuer.yaml
 
 
 echo -e "${GREEN}⏳ Installing CloudNativePG (operator)...${NC}"
-kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.17/releases/cnpg-1.17.5.yaml
 
+kubectl apply --server-side -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.27/releases/cnpg-1.27.0.yaml
+
+helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
+helm repo update
+
+helm install nfs-client nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
+  --namespace nfs-provisioner --create-namespace \
+  --set nfs.server=192.168.0.20 \
+  --set nfs.path=/srv/nfs/k8s \
+  --set storageClass.name=nfs-client \
+  --set storageClass.defaultClass=false

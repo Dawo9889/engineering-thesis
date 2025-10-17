@@ -10,7 +10,13 @@
     - keepalived
 
 - name: Configure NFS servers
-  hosts: nfs
+  hosts: nfs-servers
   gather_facts: true
   roles:
     - nfs-server
+
+- name: Configure NFS clients
+  hosts: nfs-clients
+  gather_facts: true
+  roles:
+    - nfs-client

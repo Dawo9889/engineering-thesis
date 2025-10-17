@@ -1,0 +1,6 @@
+---
+- name: Install NFS client on inventory hosts
+  hosts: all
+  become: true
+  roles:
+    - role: nfs_client
