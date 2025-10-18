@@ -28,12 +28,12 @@ passboltEnv:
     CACHE_CAKE_DEFAULT_SERVER: 127.0.0.1
     PASSBOLT_REGISTRATION_PUBLIC: true
     DEBUG: true
-    PASSBOLT_KEY_EMAIL: passbolt@yourdomain.com
-    EMAIL_DEFAULT_FROM: no-reply@passbolt.local
+    PASSBOLT_KEY_EMAIL: passbolt@passbolt.k3s.dawo9889-homelab.ovh
+    EMAIL_DEFAULT_FROM: no-reply@passbolt.k3s.dawo9889-homelab.ovh
     EMAIL_DEFAULT_FROM_NAME: Passbolt
-    EMAIL_TRANSPORT_DEFAULT_HOST: 127.0.0.1
+    EMAIL_TRANSPORT_DEFAULT_HOST: smtp.gmail.com
     EMAIL_TRANSPORT_DEFAULT_PORT: 587
-    EMAIL_TRANSPORT_DEFAULT_TLS: false
+    EMAIL_TRANSPORT_DEFAULT_TLS: true
     DATASOURCES_DEFAULT_HOST: postgres-cluster-rw.db.svc.cluster.local
     DATASOURCES_DEFAULT_PORT: "5432"
   secret:
@@ -41,6 +41,8 @@ passboltEnv:
     DATASOURCES_DEFAULT_USERNAME: passbolt
     DATASOURCES_DEFAULT_PASSWORD: zaq12wsx
     CACHE_CAKE_DEFAULT_PASSWORD: redis-passbolt-password
+    EMAIL_TRANSPORT_DEFAULT_USERNAME: dawid.spolecznosci@gmail.com
+    EMAIL_TRANSPORT_DEFAULT_PASSWORD: "xscb drce uumx jnit"
 
 # Service ustawiamy na ClusterIP i dodajemy port HTTP
 service:
