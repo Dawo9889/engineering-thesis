@@ -75,6 +75,9 @@ ingress:
       existingSecret: "passbolt-tls"
 
 # Repliki i skalowanie
-replicaCount: 1
+# replicaCount: 3
 autoscaling:
-  enabled: false
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
