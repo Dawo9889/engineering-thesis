@@ -1,3 +1,4 @@
+```
 #!/bin/bash
 set -e
 
@@ -68,3 +69,46 @@ echo "===================================="
 echo "Instalacja zakończona pomyślnie!"
 echo "Możesz teraz uruchomić kubeadm init."
 echo "===================================="
+
+```
+
+
+## Inicjalizacja klastra control node 1
+```
+sudo kubeadm init --control-plane-endpoint "192.168.0.10:6443" \
+  --upload-certs \
+  --pod-network-cidr=10.244.0.0/16
+```
+
+## Inicjalizacja calico, który pozwala na komunikacje podow na roznych node'ach
+```
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.30.4/manifests/operator-crds.yaml  
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.30.4/manifests/tigera-operator.yaml
+```
+
+```
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.30.4/manifests/custom-resources.yaml -O
+```
+Zmień pod network na ten podany podczas inicjalizacji klastra
+```
+    - name: default-ipv4-ippool
+      blockSize: 26
+      cidr: 192.168.0.0/16
+```
+
+
+## Dołaczenie innych control node (komende skopiowac z outputu control node1)
+```
+  kubeadm join 192.168.0.10:6443 --token c698et.4merh255qkaj50wz \                                                                              
+
+        --discovery-token-ca-cert-hash sha256:e005379127778e34cf121066f1e637ae73ef6f392d8ecccdcbf5a523e922def2 \                                
+
+        --control-plane --certificate-key a21ba7adabf6599036c5adc618f7554dc007c34fa279599de12b865642ad686d
+```
+
+## Dołączanie worker nodes (komende skopiowac z outputu control node 1)
+```
+kubeadm join 192.168.0.10:6443 --token c698et.4merh255qkaj50wz \                                    
+    --discovery-token-ca-cert-hash sha256:e005379127778e34cf121066f1e637ae73ef6f392d8ecccdcbf5a523e922def2
+```
+

@@ -1,4 +1,14 @@
 ---
+- name: apt update on all hosts
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: update apt cache
+      apt:
+        update_cache: yes
+
+
 - name: Configure HA load balancers
   hosts: lb
   gather_facts: true
