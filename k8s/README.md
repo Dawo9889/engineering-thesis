@@ -112,3 +112,6 @@ kubeadm join 192.168.0.10:6443 --token c698et.4merh255qkaj50wz \
     --discovery-token-ca-cert-hash sha256:e005379127778e34cf121066f1e637ae73ef6f392d8ecccdcbf5a523e922def2
 ```
 
+
+
+## Installing Cert Manager

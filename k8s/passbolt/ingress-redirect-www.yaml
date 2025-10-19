@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: passbolt-www-redirect
+  namespace: passbolt
+  annotations:
+    "kubernetes.io/ingress.class": "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+    nginx.ingress.kubernetes.io/permanent-redirect: "https://passbolt.k3s.dawo9889-homelab.ovh"
+    nginx.ingress.kubernetes.io/permanent-redirect-code: "301"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - www.passbolt.k8s.dawo9889-homelab.ovh
+      secretName: passbolt-tls
+  rules:
+    - host: www.passbolt.k8s.dawo9889-homelab.ovh
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: passbolt
+                port:
+                  name: http
