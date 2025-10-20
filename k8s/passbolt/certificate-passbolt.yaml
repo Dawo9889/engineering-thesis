@@ -1,15 +1,17 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: wildcard-k8s-dawo9889-homelab-ovh-passbolt
+  name: passbolt-tls
   namespace: passbolt
 spec:
-  secretName: wildcard-k8s-dawo9889-homelab-ovh-tls
+  secretName: passbolt-tls
   issuerRef:
     name: letsencrypt-cloudflare
     kind: ClusterIssuer
+  commonName: passbolt.k8s.dawo9889-homelab.ovh
   dnsNames:
-    - "*.k8s.dawo9889-homelab.ovh"
-    - "k8s.dawo9889-homelab.ovh"
-
----
+    - passbolt.k8s.dawo9889-homelab.ovh
+    - www.passbolt.k8s.dawo9889-homelab.ovh
+  privateKey:
+    algorithm: RSA
+    size: 2048
