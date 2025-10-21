@@ -14,7 +14,6 @@ resource "proxmox_vm_qemu" "cloud-init" {
 
   onboot = each.value.onboot
   startup = each.value.startup
-
   ipconfig0 = each.value.ipconfig
   # ciuser = each.value.ciuser
   # cipassword = each.value.cipassword
@@ -28,6 +27,7 @@ resource "proxmox_vm_qemu" "cloud-init" {
 
   cpu {
     cores = each.value.cores
+    type = "x86-64-v2-AES"
   }
 
   network {
