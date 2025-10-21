@@ -115,3 +115,7 @@ kubeadm join 192.168.0.10:6443 --token c698et.4merh255qkaj50wz \
 
 
 ## Installing Cert Manager
+
+```
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.19.1/cert-manager.yaml
+```

@@ -1,15 +1,15 @@
 ---
 # Shared variables for load balancers
 
-virtual_ip: 192.168.0.10
+virtual_ip: 192.168.4.160
 virtual_router_id: 51
 keepalived_auth_pass: "zaq12wsx"   # Use ansible-vault in production
 
 # Kubernetes API (or other TCP service) backend servers
 masters_api_servers:
-  - 192.168.0.3:6443
-  - 192.168.0.4:6443
-  - 192.168.0.5:6443
+  - 192.168.4.150:6443
+  - 192.168.4.151:6443
+  - 192.168.4.152:6443
 
 haproxy_listen_port: 6443
 haproxy_stats_enabled: true
