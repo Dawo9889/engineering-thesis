@@ -3,7 +3,7 @@ resource "proxmox_vm_qemu" "cloud-init" {
 
   vmid = each.value.vm_id
   name = each.value.name
-  target_node = "pve1"
+  target_node = each.value.target_node
 
   clone = "ubuntu-server-noble"
   full_clone = false
@@ -16,9 +16,9 @@ resource "proxmox_vm_qemu" "cloud-init" {
   startup = each.value.startup
 
   ipconfig0 = each.value.ipconfig
-  ciuser = each.value.ciuser
-  cipassword = each.value.cipassword
-  sshkeys = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILhKpbWy7VPP7p7CL0/DdNtrWHnTTogaAfXmNegECbJZ For automation"
+  # ciuser = each.value.ciuser
+  # cipassword = each.value.cipassword
+  # sshkeys = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILhKpbWy7VPP7p7CL0/DdNtrWHnTTogaAfXmNegECbJZ For automation"
   nameserver = "1.1.1.1"
 
   serial {
@@ -42,7 +42,7 @@ resource "proxmox_vm_qemu" "cloud-init" {
     virtio {
       virtio0 {
         disk {
-          storage   = "local-lvm"
+          storage   = "Share-NFS"
           size      = "32G"
           iothread  = true
           replicate = false
@@ -52,7 +52,7 @@ resource "proxmox_vm_qemu" "cloud-init" {
     ide {
       ide0 {
         cloudinit {
-          storage = "local-lvm"
+          storage = "Share-NFS"
         }
       }
     }
