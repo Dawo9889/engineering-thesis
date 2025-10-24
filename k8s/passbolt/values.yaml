@@ -25,7 +25,7 @@ passboltEnv:
   plain:
     APP_FULL_BASE_URL: https://passbolt.angabo.cloud
     PASSBOLT_SSL_FORCE: false
-    CACHE_CAKE_DEFAULT_SERVER: 127.0.0.1
+    CACHE_DEFAULT_HOST: 127.0.0.1
     PASSBOLT_REGISTRATION_PUBLIC: true
     DEBUG: true
     PASSBOLT_KEY_EMAIL: passbolt@angabo.cloud
@@ -40,9 +40,9 @@ passboltEnv:
     DATASOURCES_DEFAULT_DATABASE: passbolt-db
     DATASOURCES_DEFAULT_USERNAME: passbolt
     DATASOURCES_DEFAULT_PASSWORD: zaq12wsx
-    CACHE_CAKE_DEFAULT_PASSWORD: redis-passbolt-password
-    # EMAIL_TRANSPORT_DEFAULT_USERNAME: inzynierka.polsl.ha@gmail.com
-    # EMAIL_TRANSPORT_DEFAULT_PASSWORD: ""
+    CACHE_DEFAULT_PASSWORD: redis-passbolt-password
+    EMAIL_TRANSPORT_DEFAULT_USERNAME: inzynierka.polsl.ha@gmail.com
+    EMAIL_TRANSPORT_DEFAULT_PASSWORD: ""
 
 # Service ustawiamy na ClusterIP i dodajemy port HTTP
 service:
@@ -75,7 +75,7 @@ ingress:
       existingSecret: "passbolt-tls"
 
 # Repliki i skalowanie
-replicaCount: 1
+replicaCount: 3
 # autoscaling:
 #   enabled: true
 #   minReplicas: 2
