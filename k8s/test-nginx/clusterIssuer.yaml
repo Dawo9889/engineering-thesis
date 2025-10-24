@@ -4,14 +4,14 @@ metadata:
   name: letsencrypt-cloudflare
 spec:
   acme:
-    email: dawid.spolecznosci@gmail.com
+    email: inzynierka.polsl.ha@gmail.com
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-prod-cloudflare-key
     solvers:
     - dns01:
         cloudflare:
-          email: dawid.spolecznosci@gmail.com
+          email: inzynierka.polsl.ha@gmail.com
           apiTokenSecretRef:
             name: cloudflare-api-token-secret
             key: api-token

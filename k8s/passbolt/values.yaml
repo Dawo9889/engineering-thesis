@@ -23,13 +23,13 @@ app:
 # Environment variables
 passboltEnv:
   plain:
-    APP_FULL_BASE_URL: https://passbolt.k8s.dawo9889-homelab.ovh
+    APP_FULL_BASE_URL: https://passbolt.angabo.cloud
     PASSBOLT_SSL_FORCE: false
     CACHE_CAKE_DEFAULT_SERVER: 127.0.0.1
     PASSBOLT_REGISTRATION_PUBLIC: true
     DEBUG: true
-    PASSBOLT_KEY_EMAIL: passbolt@passbolt.k8s.dawo9889-homelab.ovh
-    EMAIL_DEFAULT_FROM: no-reply@passbolt.k8s.dawo9889-homelab.ovh
+    PASSBOLT_KEY_EMAIL: passbolt@angabo.cloud
+    EMAIL_DEFAULT_FROM: no-reply@angabo.cloud
     EMAIL_DEFAULT_FROM_NAME: Passbolt
     EMAIL_TRANSPORT_DEFAULT_HOST: smtp.gmail.com
     EMAIL_TRANSPORT_DEFAULT_PORT: 587
@@ -41,8 +41,8 @@ passboltEnv:
     DATASOURCES_DEFAULT_USERNAME: passbolt
     DATASOURCES_DEFAULT_PASSWORD: zaq12wsx
     CACHE_CAKE_DEFAULT_PASSWORD: redis-passbolt-password
-    EMAIL_TRANSPORT_DEFAULT_USERNAME: dawid.spolecznosci@gmail.com
-    EMAIL_TRANSPORT_DEFAULT_PASSWORD: ""
+    # EMAIL_TRANSPORT_DEFAULT_USERNAME: inzynierka.polsl.ha@gmail.com
+    # EMAIL_TRANSPORT_DEFAULT_PASSWORD: ""
 
 # Service ustawiamy na ClusterIP i dodajemy port HTTP
 service:
@@ -63,21 +63,21 @@ ingress:
     "kubernetes.io/ingress.class": "nginx"
     "cert-manager.io/cluster-issuer": "letsencrypt-cloudflare"
   hosts:
-    - host: "passbolt.k8s.dawo9889-homelab.ovh"
+    - host: "passbolt.angabo.cloud"
       paths:
         - path: "/"
           port: http
           pathType: "ImplementationSpecific"
   tls:
     - hosts:
-        - "passbolt.k8s.dawo9889-homelab.ovh"
-        - "www.passbolt.k8s.dawo9889-homelab.ovh"
+        - "passbolt.angabo.cloud"
+        - "www.passbolt.angabo.cloud"
       existingSecret: "passbolt-tls"
 
 # Repliki i skalowanie
-# replicaCount: 3
-autoscaling:
-  enabled: true
-  minReplicas: 2
-  maxReplicas: 5
-  targetCPUUtilizationPercentage: 80
+replicaCount: 1
+# autoscaling:
+#   enabled: true
+#   minReplicas: 2
+#   maxReplicas: 5
+#   targetCPUUtilizationPercentage: 80

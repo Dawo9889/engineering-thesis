@@ -8,10 +8,10 @@ spec:
   issuerRef:
     name: letsencrypt-cloudflare
     kind: ClusterIssuer
-  commonName: passbolt.k8s.dawo9889-homelab.ovh
+  commonName: passbolt.angabo.cloud
   dnsNames:
-    - passbolt.k8s.dawo9889-homelab.ovh
-    - www.passbolt.k8s.dawo9889-homelab.ovh
+    - passbolt.angabo.cloud
+    - www.passbolt.angabo.cloud
   privateKey:
     algorithm: RSA
-    size: 2048
+    size: 4096
