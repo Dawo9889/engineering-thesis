@@ -2,4 +2,5 @@
 *.tfstate.backup
 *.auto.tfvars
 credentials.tfvars
+*.tfvars
 .terraform/
