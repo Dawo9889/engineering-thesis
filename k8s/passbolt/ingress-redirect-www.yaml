@@ -6,16 +6,16 @@ metadata:
   annotations:
     "kubernetes.io/ingress.class": "nginx"
     cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-    nginx.ingress.kubernetes.io/permanent-redirect: "https://passbolt.k3s.dawo9889-homelab.ovh"
+    nginx.ingress.kubernetes.io/permanent-redirect: "https://passbolt.angabo.cloud"
     nginx.ingress.kubernetes.io/permanent-redirect-code: "301"
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - www.passbolt.k8s.dawo9889-homelab.ovh
+        - www.passbolt.angabo.cloud
       secretName: passbolt-tls
   rules:
-    - host: www.passbolt.k8s.dawo9889-homelab.ovh
+    - host: www.passbolt.angabo.cloud
       http:
         paths:
           - path: /

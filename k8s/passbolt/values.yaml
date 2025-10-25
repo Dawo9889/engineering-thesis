@@ -1,9 +1,7 @@
-# Wyłączamy zależności, bo korzystamy z zewnętrznego Postgresa
 postgresqlDependencyEnabled: false
 mariadbDependencyEnabled: false
 redisDependencyEnabled: true
-
-# Redis zostawiamy włączone (wymagane przez Passbolt)
+#Instalacja redis
 redis:
   auth:
     enabled: true
@@ -15,10 +13,10 @@ redis:
 app:
   image:
     repository: passbolt/passbolt
-    tag: 5.6.0-1-ce
+    tag: 5.6.0-1-pro
     pullPolicy: IfNotPresent
   database:
-    kind: postgresql # bo łączymy z zewnętrznym Postgresa
+    kind: postgresql # Połączenie z zewnętrznym Postgresql
 
 # Environment variables
 passboltEnv:
@@ -34,7 +32,7 @@ passboltEnv:
     EMAIL_TRANSPORT_DEFAULT_HOST: smtp.gmail.com
     EMAIL_TRANSPORT_DEFAULT_PORT: 587
     EMAIL_TRANSPORT_DEFAULT_TLS: true
-    DATASOURCES_DEFAULT_HOST: postgres-cluster-rw.db.svc.cluster.local
+    DATASOURCES_DEFAULT_HOST: postgres-cluster-rw.db.svc.cluster.local # Wskazanie na serwis rw bazy danych
     DATASOURCES_DEFAULT_PORT: "5432"
   secret:
     DATASOURCES_DEFAULT_DATABASE: passbolt-db
@@ -73,11 +71,23 @@ ingress:
         - "passbolt.angabo.cloud"
         - "www.passbolt.angabo.cloud"
       existingSecret: "passbolt-tls"
+livenessProbe:
+  httpGet:
+    port: https
+    scheme: HTTPS
+    path: /healthcheck/status.json
+    httpHeaders:
+      - name: Host
+        value: passbolt.local
+  initialDelaySeconds: 60   # Pod czeka 60 sekund przed pierwszym sprawdzeniem
+  periodSeconds: 30         # Sprawdzenie co 30 sekund
+  timeoutSeconds: 10         # Maksymalny czas oczekiwania na odpowiedź
+  failureThreshold: 3       # Po 3 nieudanych próbach pod zostaje restartowany
 
 # Repliki i skalowanie
-replicaCount: 3
-# autoscaling:
-#   enabled: true
-#   minReplicas: 2
-#   maxReplicas: 5
-#   targetCPUUtilizationPercentage: 80
+# replicaCount: 3
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
