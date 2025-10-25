@@ -1,11 +1,11 @@
-# This file is maintained automatically by "tofu init".
+# This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
-provider "registry.opentofu.org/telmate/proxmox" {
+provider "registry.terraform.io/telmate/proxmox" {
   version     = "3.0.2-rc01"
   constraints = "3.0.2-rc01"
   hashes = [
-    "h1:L7yC1ZU3GEWOPVaKqMbnS/BUMWgHs+Au5cTHHt9znZE=",
+    "h1:QsilaoNib1vUtd8uZ9A7v9V89mNZVhsdIAzMZISdOiY=",
     "zh:34d264243a4513f4e30c01fb37cc6a3e592d7823dfd182c5edfb170ac7b7de3a",
     "zh:544428311ad20fbb3ad2cd854e893bbf036023cb57c3acc5093d141976dac670",
     "zh:5c2396b328edee8de7ac144c15a6b7e668e81063699bc8c110d7c39fb8da70e9",
