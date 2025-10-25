@@ -61,7 +61,7 @@ variable proxmox_api_token {
         target_node = "pve2"
         vm_id       = 1002
         name        = "master-3"
-        memory      = 2048
+        memory      = 4096
         vm_state    = "stopped"
         onboot      = true
         startup     = "order=1"
@@ -72,10 +72,10 @@ variable proxmox_api_token {
         bridge      = "vmbr0"
         network_tag = 0
       },
-      "worker-node1" = {
+      "master-node4" = {
+        target_node = "pve2"
         vm_id       = 1003
-        target_node = "pve1"
-        name        = "worker-1"
+        name        = "master-4"
         memory      = 4096
         vm_state    = "stopped"
         onboot      = true
@@ -83,14 +83,14 @@ variable proxmox_api_token {
         ipconfig    = "ip=192.168.4.153/24,gw=192.168.4.1"
         ciuser      = "root"
         cipassword  = "zaq12wsx"
-        cores       = 1
+        cores       = 2
         bridge      = "vmbr0"
         network_tag = 0
       },
-      "worker-node2" = {
+      "worker-node1" = {
         vm_id       = 1004
-        target_node = "pve2"
-        name        = "worker-2"
+        target_node = "pve1"
+        name        = "worker-1"
         memory      = 4096
         vm_state    = "stopped"
         onboot      = true
@@ -98,14 +98,14 @@ variable proxmox_api_token {
         ipconfig    = "ip=192.168.4.154/24,gw=192.168.4.1"
         ciuser      = "root"
         cipassword  = "zaq12wsx"
-        cores       = 1
+        cores       = 4
         bridge      = "vmbr0"
         network_tag = 0
       },
-      "worker-node3" = {
+      "worker-node2" = {
         vm_id       = 1005
-        target_node = "pve2"
-        name        = "worker-3"
+        target_node = "pve3"
+        name        = "worker-2"
         memory      = 4096
         vm_state    = "stopped"
         onboot      = true
@@ -113,19 +113,34 @@ variable proxmox_api_token {
         ipconfig    = "ip=192.168.4.155/24,gw=192.168.4.1"
         ciuser      = "root"
         cipassword  = "zaq12wsx"
-        cores       = 1
+        cores       = 4
+        bridge      = "vmbr0"
+        network_tag = 0
+      },
+      "worker-node3" = {
+        vm_id       = 1006
+        target_node = "pve3"
+        name        = "worker-3"
+        memory      = 4096
+        vm_state    = "stopped"
+        onboot      = true
+        startup     = "order=1"
+        ipconfig    = "ip=192.168.4.156/24,gw=192.168.4.1"
+        ciuser      = "root"
+        cipassword  = "zaq12wsx"
+        cores       = 4
         bridge      = "vmbr0"
         network_tag = 0
       },
       "lb-node1" = {
-        vm_id       = 1006
+        vm_id       = 1007
         target_node = "pve1"
         name        = "lb-1"
         memory      = 512
         vm_state    = "stopped"
         onboot      = true
         startup     = "order=1"
-        ipconfig    = "ip=192.168.4.156/24,gw=192.168.4.1"
+        ipconfig    = "ip=192.168.4.157/24,gw=192.168.4.1"
         ciuser      = "root"
         cipassword  = "zaq12wsx"
         cores       = 1
@@ -133,14 +148,14 @@ variable proxmox_api_token {
         network_tag = 0
       },
       "lb-node2" = {
-        vm_id       = 1007
+        vm_id       = 1008
         target_node = "pve2"
         name        = "lb-2"
         memory      = 512
         vm_state    = "stopped"
         onboot      = true
         startup     = "order=1"
-        ipconfig    = "ip=192.168.4.157/24,gw=192.168.4.1"
+        ipconfig    = "ip=192.168.4.158/24,gw=192.168.4.1"
         ciuser      = "root"
         cipassword  = "zaq12wsx"
         cores       = 1
